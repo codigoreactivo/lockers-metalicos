@@ -246,7 +246,7 @@ const SearchModal: React.FC = () => {
                         }}
                         className="bg-gray-100 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors"
                     >
-                        Caja fuerte
+                        Lockers Metálicos
                     </button>
                     <button
                         onClick={() => {
@@ -255,7 +255,7 @@ const SearchModal: React.FC = () => {
                         }}
                         className="bg-gray-100 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors"
                     >
-                        Digital
+                        Lockers
                     </button>
                     <button
                         onClick={() => {
@@ -264,7 +264,7 @@ const SearchModal: React.FC = () => {
                         }}
                         className="bg-gray-100 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors"
                     >
-                        Buzón
+                        Lockers Especiales
                     </button>
                 </div>
             </div>

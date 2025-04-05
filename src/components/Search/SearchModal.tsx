@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
 import { client } from '../../utils/apollo';
 import { SEARCH_PRODUCTS_QUERY } from '../../graphql/queries';
 import SearchResultSkeleton from '../Skeletons/SearchResultSkeleton';
+
+console.log('SearchModal: Componente inicializado'); // Log inicial
 
 interface Product {
     id: string;
@@ -26,6 +28,8 @@ interface Product {
 }
 
 const SearchModal: React.FC = () => {
+    console.log('SearchModal: Renderizando componente'); // Log de renderizado
+
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState<Product[]>([]);
@@ -38,6 +42,7 @@ const SearchModal: React.FC = () => {
 
     // Debounce para la búsqueda (300ms)
     const debouncedSearch = useCallback((term: string) => {
+        console.log('SearchModal: Iniciando búsqueda debounced', { term }); // Log de búsqueda
         if (searchTimeout.current) {
             clearTimeout(searchTimeout.current);
         }
@@ -46,7 +51,6 @@ const SearchModal: React.FC = () => {
             if (term.length >= 3) {
                 handleSearch(term);
             } else if (hasTyped) {
-                // Si el usuario borró y quedaron menos de 3 caracteres
                 setSearchResults([]);
                 setShowNoResults(false);
             }
@@ -110,6 +114,7 @@ const SearchModal: React.FC = () => {
 
     // Función para realizar la búsqueda
     const handleSearch = async (term: string) => {
+        console.log('SearchModal: Ejecutando búsqueda', { term }); // Log de búsqueda
         setIsLoading(true);
         setShowNoResults(false);
 
@@ -121,11 +126,16 @@ const SearchModal: React.FC = () => {
                 }
             });
 
+            console.log('SearchModal: Resultados recibidos', {
+                resultCount: data?.products?.nodes?.length,
+                results: data?.products?.nodes
+            }); // Log de resultados
+
             const products = data?.products?.nodes || [];
             setSearchResults(products);
             setShowNoResults(products.length === 0);
         } catch (error) {
-            console.error('Error al buscar productos:', error);
+            console.error('SearchModal: Error en búsqueda:', error);
             setSearchResults([]);
             setShowNoResults(true);
         } finally {
@@ -136,13 +146,13 @@ const SearchModal: React.FC = () => {
     // Manejar cambio en el input
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
+        console.log('SearchModal: Cambio en input', { value }); // Log de input
         setSearchTerm(value);
 
         if (!hasTyped && value.length > 0) {
             setHasTyped(true);
         }
 
-        // Si borra todo el texto, reiniciar resultados
         if (value.length === 0) {
             setSearchResults([]);
             setShowNoResults(false);
@@ -167,8 +177,15 @@ const SearchModal: React.FC = () => {
         return product.salePrice || product.price || product.regularPrice;
     };
 
-    // Determinar qué mostrar en el área de resultados
+    // Renderizar resultados
     const renderResults = () => {
+        console.log('SearchModal: Renderizando resultados', {
+            isLoading,
+            showNoResults,
+            resultsLength: searchResults.length,
+            searchTerm
+        }); // Log de estado de resultados
+
         if (isLoading) {
             return <SearchResultSkeleton />;
         }
@@ -241,35 +258,46 @@ const SearchModal: React.FC = () => {
                 <div className="flex flex-wrap gap-2 justify-center mt-4">
                     <button
                         onClick={() => {
-                            setSearchTerm("caja fuerte");
-                            handleSearch("caja fuerte");
+                            console.log('SearchModal: Clic en botón de búsqueda rápida', {
+                                término: "lockers metálicos"
+                            }); // Log de clic en botón
+                            setSearchTerm("lockers metálicos");
+                            handleSearch("lockers metálicos");
                         }}
-                        className="bg-gray-100 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors"
+                        className="bg-[#EBBC2A] text-white px-4 py-2 rounded-full text-sm hover:bg-[#d4a826] transition-colors"
                     >
-                        Caja fuerte
+                        Lockers Metálicos
                     </button>
                     <button
                         onClick={() => {
-                            setSearchTerm("digital");
-                            handleSearch("digital");
+                            console.log('SearchModal: Clic en botón de búsqueda rápida', {
+                                término: "lockers"
+                            });
+                            setSearchTerm("lockers");
+                            handleSearch("lockers");
                         }}
-                        className="bg-gray-100 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors"
+                        className="bg-[#EBBC2A] text-white px-4 py-2 rounded-full text-sm hover:bg-[#d4a826] transition-colors"
                     >
-                        Digital
+                        Lockers
                     </button>
                     <button
                         onClick={() => {
-                            setSearchTerm("buzon");
-                            handleSearch("buzon");
+                            console.log('SearchModal: Clic en botón de búsqueda rápida', {
+                                término: "lockers especiales"
+                            });
+                            setSearchTerm("lockers especiales");
+                            handleSearch("lockers especiales");
                         }}
-                        className="bg-gray-100 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors"
+                        className="bg-[#EBBC2A] text-white px-4 py-2 rounded-full text-sm hover:bg-[#d4a826] transition-colors"
                     >
-                        Buzón
+                        Lockers Especiales
                     </button>
                 </div>
             </div>
         );
     };
+
+    console.log('SearchModal version: 1.0.1'); // Para verificar que se carga la versión nueva
 
     return (
         <>

@@ -2,27 +2,39 @@ import { useState, useEffect } from 'react';
 import { client } from '../../utils/apollo';
 import { PRODUCT_CATEGORIES_QUERY } from '../../graphql/queries';
 
+interface CategoryImage {
+    sourceUrl: string;
+}
+
+interface Category {
+    id: string;
+    name: string;
+    link: string;
+    image: {
+        sourceUrl: string;
+    };
+}
+
 export default function FooterCategories() {
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                // Usar Apollo Client directamente con la consulta existente
                 const { data } = await client.query({
                     query: PRODUCT_CATEGORIES_QUERY,
                 });
 
-                if (data && data.productCategories && data.productCategories.nodes) {
+                if (data?.productCategories?.nodes) {
                     setCategories(data.productCategories.nodes);
                 } else {
                     throw new Error('No se pudieron cargar las categorías');
                 }
             } catch (err) {
                 console.error('Error al cargar categorías:', err);
-                setError(err.message);
+                setError(err instanceof Error ? err.message : 'Error desconocido');
             } finally {
                 setLoading(false);
             }

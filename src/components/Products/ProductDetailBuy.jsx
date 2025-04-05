@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { addCartItem, isCartOpen } from '../../cartStore';
-import { IoCartOutline, IoShieldCheckmarkOutline } from "react-icons/io5";
-import { FaTruck, FaWhatsapp } from 'react-icons/fa';
+import { IoCartOutline } from "react-icons/io5";
+import { FaWhatsapp } from 'react-icons/fa';
 
 // Componente de precio del producto
 const ProductPrice = ({ price, hasPrice, isLoading }) => {

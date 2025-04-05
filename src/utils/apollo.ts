@@ -1,13 +1,13 @@
-import * as pkg from '@apollo/client/core';
-const { ApolloClient } = pkg;
-
-import * as pkgHttp from '@apollo/client/link/http';
-const { createHttpLink } = pkgHttp;
+import {
+    ApolloClient,
+    InMemoryCache,
+    createHttpLink,
+} from '@apollo/client';
+import { createOptimizedCache } from '../graphql/registry';
 
 import * as pkgError from '@apollo/client/link/error';
 const { onError } = pkgError;
 
-import { fragmentRegistry, createOptimizedCache } from '../graphql/registry';
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 
 // Cargar mensajes de error detallados en desarrollo

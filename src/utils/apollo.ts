@@ -1,13 +1,8 @@
-import {
-    ApolloClient,
-    InMemoryCache,
-    createHttpLink,
-} from '@apollo/client';
+import { ApolloClient } from '@apollo/client/core';
+import { createHttpLink } from '@apollo/client/link/http';
+import { InMemoryCache } from '@apollo/client/cache';
+import { onError } from '@apollo/client/link/error';
 import { createOptimizedCache } from '../graphql/registry';
-
-import * as pkgError from '@apollo/client/link/error';
-const { onError } = pkgError;
-
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 
 // Cargar mensajes de error detallados en desarrollo
@@ -56,18 +51,17 @@ export const client = new ApolloClient({
     defaultOptions: {
         watchQuery: {
             fetchPolicy: 'cache-and-network',
-            errorPolicy: 'all', // Cambiado a 'all' para evitar que los errores detengan la UI
+            errorPolicy: 'all',
             notifyOnNetworkStatusChange: true,
         },
         query: {
-            fetchPolicy: 'cache-first', // Prioriza la caché para mostrar datos incluso si hay errores
+            fetchPolicy: 'cache-first',
             errorPolicy: 'all',
         },
         mutate: {
             errorPolicy: 'all',
         },
     },
-    // Ignora los errores de validación de tipo para MediaItem (problemas con objetos sin ID)
     assumeImmutableResults: false
 });
 

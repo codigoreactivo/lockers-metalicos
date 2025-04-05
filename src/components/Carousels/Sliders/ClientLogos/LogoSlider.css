@@ -1,0 +1,36 @@
+.logo-infite-slider .swiper-wrapper{
+  transition-timing-function: linear;
+  z-index: 0 !important;
+  align-items: center;
+}
+
+.logo-infite-slider .swiper-slide{
+  height: 100%;
+  width: auto !important;
+}
+
+/* O Opción 2: Usando pseudo-elementos con gradientes */
+.logo-infite-slider {
+  position: relative;
+}
+
+.logo-infite-slider::before,
+.logo-infite-slider::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.logo-infite-slider::before {
+  left: 0;
+  background: linear-gradient(to right, white, transparent);
+}
+
+.logo-infite-slider::after {
+  right: 0;
+  background: linear-gradient(to left, white, transparent);
+}

@@ -1,0 +1,68 @@
+---
+import HeroSlider from "../Carousels/Sliders/Hero/HeroSlider.jsx";
+---
+
+<section
+  class="container flex flex-col xl:flex-row items-center justify-center mx-auto w-full h-auto px-4 lg:px-0 pb-4 lg:py-14 lg:gap-4"
+>
+  <div class="w-full xl:w-[45%] flex flex-col items-start py-3 justify-center">
+    <div class="w-full relative flex justify-between items-center my-2 xl:my-4">
+      <div class="">
+        <h1
+          class="text-[2.7rem] lg:text-[8rem] leading-none font-black uppercase relative"
+        >
+          Lockers
+          <img
+            src="/firmafbs.svg"
+            alt="fabrinsa-firma"
+            class="hidden sm:block absolute w-20 lg:w-32 right-[-10px] lg:right-[-40px] lg:top-0 top-3 hover:scale-105 transition-all duration-300 ease-linear cursor-pointer"
+          />
+          <span
+            class="bg-gradient-to-r from-[#EBBC2A] to-[#EBBC2A] text-transparent bg-clip-text"
+          >
+            <br class="hidden sm:block" />
+            Metalicos
+          </span>
+        </h1>
+      </div>
+    </div>
+    <div class="flex flex-col gap-3">
+      <p class="text-base leading-none">
+        Oferta en toda la categoría de cajas fuertes hasta agotar Stock.
+      </p>
+      <div class="w-full h-fit py-2 flex flex-rox justify-between relative">
+        <div>
+          <a
+            href="/productos"
+            class="text-white bg-black uppercase oswald font-semibold rounded-md py-3 px-6 whitespace-nowrap w-fit text-center text-base hover:bg-[#EBBC2A] hover:text-black group duration-300 transition-all ease-linear"
+            rel="noopener noreferrer"
+          >
+            Comprar
+            <span class="text-[#EBBC2A] group-hover:text-black"> Ahora</span>
+          </a>
+        </div>
+        <div class="relative w-full h-full">
+          <img
+            src="/firmafbs.svg"
+            alt="fabrinsa-firma"
+            class="absolute sm:hidden top-[-25px] right-0 w-14 hover:scale-105 transition-all duration-300 ease-linear cursor-pointer"
+          />
+        </div>
+      </div>
+      <p class="text-sm italic">
+        *Obtén un 20% de descuento <span class="font-bold">
+          <a
+            href="https://wa.me/51987654321"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Aqui</a
+          ></span
+        >.
+      </p>
+    </div>
+  </div>
+  <div class="w-full xl:w-[55%] block relative">
+    <HeroSlider client:visible />
+  </div>
+</section>

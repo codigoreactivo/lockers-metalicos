@@ -1,0 +1,409 @@
+---
+import Layout from "../layouts/Layout.astro";
+// Cambiamos la importación del ícono por una alternativa
+---
+
+<Layout title="¡Gracias por tu Pedido! - FABRINSA">
+    <div class="container mx-auto px-4 py-16 min-h-screen print-container">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-10">
+                <div
+                    class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                    <!-- Reemplazamos el ícono por un símbolo de check (✓) -->
+                    <span class="text-green-600 text-4xl">✓</span>
+                </div>
+                <h1 class="text-4xl font-bold bebas text-center mb-2">
+                    ¡Pedido Confirmado!
+                </h1>
+                <p class="text-lg text-gray-600">
+                    Gracias por tu compra. Hemos recibido tu pedido
+                    correctamente.
+                </p>
+            </div>
+
+            <div
+                id="order-details"
+                class="bg-white shadow-lg rounded-lg p-6 mb-8"
+            >
+                <h2 class="text-2xl font-bold oswald border-b pb-4 mb-4">
+                    Detalles del Pedido
+                </h2>
+                <div id="order-info" class="animate-pulse">
+                    <div class="h-4 bg-gray-200 rounded mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded mb-4 w-3/4"></div>
+                    <div class="h-4 bg-gray-200 rounded mb-4"></div>
+                </div>
+            </div>
+
+            <div
+                id="customer-details"
+                class="bg-white shadow-lg rounded-lg p-6 mb-8"
+            >
+                <h2 class="text-2xl font-bold oswald border-b pb-4 mb-4">
+                    Información de Contacto
+                </h2>
+                <div id="customer-info" class="animate-pulse">
+                    <div class="h-4 bg-gray-200 rounded mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded mb-4 w-3/4"></div>
+                    <div class="h-4 bg-gray-200 rounded mb-4"></div>
+                </div>
+            </div>
+
+            <div
+                id="shipping-details"
+                class="bg-white shadow-lg rounded-lg p-6 mb-8"
+            >
+                <h2 class="text-2xl font-bold oswald border-b pb-4 mb-4">
+                    Dirección de Envío
+                </h2>
+                <div id="shipping-info" class="animate-pulse">
+                    <div class="h-4 bg-gray-200 rounded mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded mb-4 w-3/4"></div>
+                    <div class="h-4 bg-gray-200 rounded mb-4"></div>
+                </div>
+            </div>
+
+            <div
+                id="payment-details"
+                class="bg-white shadow-lg rounded-lg p-6 mb-8"
+            >
+                <h2 class="text-2xl font-bold oswald border-b pb-4 mb-4">
+                    Método de Pago
+                </h2>
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="bg-gray-100 p-2 rounded">
+                        <img
+                            src="/metodos-de-pago/tranferencia/bcp-logo.png"
+                            alt="BCP"
+                            class="h-6"
+                        />
+                    </div>
+                    <span class="font-medium">Transferencia Bancaria</span>
+                </div>
+                <div
+                    class="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm"
+                >
+                    <p class="mb-2">
+                        Por favor, realice su pago directamente a nuestra cuenta
+                        bancaria:
+                    </p>
+                    <div class="space-y-1 mt-2">
+                        <p><strong>Banco:</strong> BCP</p>
+                        <p><strong>Titular:</strong> FABRINSA PERU S.A.C.</p>
+                        <p><strong>Cuenta:</strong> 194-2381424-0-86</p>
+                        <p><strong>CCI:</strong> 00219400238142408699</p>
+                    </div>
+                    <p class="mt-4 text-red-600 font-medium">
+                        Importante: Use su nombre completo como referencia de
+                        pago
+                    </p>
+                </div>
+            </div>
+
+            <div
+                id="products-details"
+                class="bg-white shadow-lg rounded-lg p-6 mb-8"
+            >
+                <h2 class="text-2xl font-bold oswald border-b pb-4 mb-4">
+                    Resumen del Pedido
+                </h2>
+                <div id="products-list" class="animate-pulse">
+                    <div class="h-16 bg-gray-200 rounded mb-4"></div>
+                    <div class="h-16 bg-gray-200 rounded mb-4"></div>
+                </div>
+                <div class="border-t pt-4 mt-6">
+                    <div
+                        class="flex justify-between items-center text-xl font-bold"
+                    >
+                        <span>Total:</span>
+                        <span id="order-total" class="text-[#EBBC2A]"
+                            >Cargando...</span
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a
+                    href="/"
+                    class="bg-black text-white px-8 py-3 rounded-lg font-semibold oswald text-center hover:bg-gray-800 transition"
+                >
+                    VOLVER A LA TIENDA
+                </a>
+                <button
+                    id="print-button"
+                    class="bg-gray-200 text-gray-800 px-8 py-3 rounded-lg font-semibold oswald text-center hover:bg-gray-300 transition flex items-center justify-center gap-2"
+                >
+                    <!-- Reemplazamos el ícono por texto -->
+                    <span class="mr-2">🖨️</span>
+                    IMPRIMIR PEDIDO
+                </button>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<script>
+    // Recuperar los datos del pedido del sessionStorage
+    document.addEventListener("DOMContentLoaded", () => {
+        try {
+            const orderDataString = sessionStorage.getItem("lastOrder");
+            if (!orderDataString) {
+                window.location.href = "/";
+                return;
+            }
+
+            const orderData = JSON.parse(orderDataString);
+            console.log("Datos del pedido recuperados:", orderData);
+
+            // Llenar la información del cliente
+            const customerInfo = document.getElementById("customer-info");
+            if (customerInfo) {
+                customerInfo.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-600">Nombre:</p>
+              <p class="font-medium">${orderData.to_name}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Email:</p>
+              <p class="font-medium">${orderData.to_email}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Teléfono:</p>
+              <p class="font-medium">${orderData.to_phone}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Fecha del pedido:</p>
+              <p class="font-medium">${orderData.order_date} - ${orderData.order_time}</p>
+            </div>
+          </div>
+        `;
+                customerInfo.classList.remove("animate-pulse");
+            }
+
+            // Llenar la información de envío
+            const shippingInfo = document.getElementById("shipping-info");
+            if (shippingInfo) {
+                shippingInfo.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-600">Dirección:</p>
+              <p class="font-medium">${orderData.to_address}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Ciudad:</p>
+              <p class="font-medium">${orderData.to_city}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Código Postal:</p>
+              <p class="font-medium">${orderData.to_postal || "No especificado"}</p>
+            </div>
+          </div>
+        `;
+                shippingInfo.classList.remove("animate-pulse");
+            }
+
+            // Llenar la información del pedido
+            const orderInfo = document.getElementById("order-info");
+            if (orderInfo) {
+                const orderId = generateOrderCode();
+                orderInfo.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-600">Número de Pedido:</p>
+              <p class="font-medium">${orderId}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Estado:</p>
+              <p class="font-medium text-yellow-600">Pendiente de pago</p>
+            </div>
+          </div>
+        `;
+                orderInfo.classList.remove("animate-pulse");
+            }
+
+            // Llenar la lista de productos
+            const productsList = document.getElementById("products-list");
+            const orderTotal = document.getElementById("order-total");
+            if (productsList && orderTotal) {
+                if (
+                    Array.isArray(orderData.items) &&
+                    orderData.items.length > 0
+                ) {
+                    let productsHtml = "";
+
+                    // Definimos el tipo para item
+                    orderData.items.forEach(
+                        (item: {
+                            name: string;
+                            image: string;
+                            quantity: number;
+                            price: string;
+                            total: string;
+                        }) => {
+                            productsHtml += `
+              <div class="flex items-center gap-4 py-3 border-b">
+                <div class="flex-shrink-0 bg-gray-100 p-2 rounded" style="width: 70px; height: 70px;">
+                  ${
+                      item.image
+                          ? `<img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain">`
+                          : `<div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">Sin imagen</div>`
+                  }
+                </div>
+                <div class="flex-grow">
+                  <h3 class="font-medium">${item.name}</h3>
+                  <div class="flex justify-between mt-1">
+                    <span class="text-gray-600">Cantidad: ${item.quantity}</span>
+                    <span class="font-semibold">${item.price}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+                        },
+                    );
+
+                    productsList.innerHTML = productsHtml;
+                    orderTotal.textContent = orderData.total;
+                } else {
+                    productsList.innerHTML =
+                        "<p>No hay productos en el pedido</p>";
+                    orderTotal.textContent = "0.00";
+                }
+                productsList.classList.remove("animate-pulse");
+            }
+
+            // Configurar botón de impresión
+            const printButton = document.getElementById("print-button");
+            if (printButton) {
+                printButton.addEventListener("click", () => {
+                    // Hacer scroll al inicio antes de imprimir para asegurar que todo el contenido se imprima
+                    window.scrollTo(0, 0);
+
+                    // Pequeño retraso para asegurar que el scroll se completó
+                    setTimeout(() => {
+                        window.print();
+                    }, 100);
+                });
+            }
+        } catch (error) {
+            console.error("Error al recuperar los datos del pedido:", error);
+        }
+    });
+
+    // Generar código aleatorio
+    const generateOrderCode = () => {
+        return (
+            "ORD-" +
+            Date.now().toString().slice(-6) +
+            "-" +
+            Math.random().toString(36).substring(2, 7).toUpperCase()
+        );
+    };
+</script>
+
+<style>
+    @media print {
+        /* Estilos generales para impresión */
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+
+        /* Ocultar elementos que no queremos imprimir */
+        body > *:not(.print-container) {
+            display: none !important;
+        }
+
+        /* Mostrar solo el contenido que queremos imprimir */
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 10px !important;
+            margin: 0 !important;
+        }
+
+        /* Asegurar que todos los elementos sean visibles */
+        #order-details,
+        #customer-details,
+        #shipping-details,
+        #payment-details,
+        #products-details {
+            display: block !important;
+            position: relative !important;
+            width: 100% !important;
+            margin: 15px 0 !important;
+            page-break-inside: avoid !important;
+            background-color: white !important;
+            border: 1px solid #ddd !important;
+            border-radius: 5px !important;
+            padding: 15px !important;
+            box-shadow: none !important;
+        }
+
+        /* Estilos para títulos */
+        h1,
+        h2 {
+            color: black !important;
+            margin-bottom: 10px !important;
+        }
+
+        /* Asegurar que las imágenes se vean */
+        img {
+            display: inline-block !important;
+            max-width: 100% !important;
+            height: auto !important;
+            print-color-adjust: exact !important;
+            -webkit-print-color-adjust: exact !important;
+        }
+
+        /* Estilos para los productos */
+        #products-list > div {
+            display: flex !important;
+            align-items: center !important;
+            margin-bottom: 10px !important;
+            padding-bottom: 10px !important;
+            border-bottom: 1px solid #eee !important;
+        }
+
+        /* Ocultar botones */
+        button,
+        a.bg-black {
+            display: none !important;
+        }
+
+        /* Ajustes para imágenes en contenedores */
+        .flex-shrink-0 {
+            width: 70px !important;
+            height: 70px !important;
+            margin-right: 15px !important;
+            background-color: #f9f9f9 !important;
+            border: 1px solid #eee !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        /* Asegurar que los contenedores flex sigan siendo flex en la impresión */
+        .flex {
+            display: flex !important;
+        }
+
+        /* Asegurar que los grids se mantengan como grids */
+        .grid {
+            display: grid !important;
+        }
+
+        /* Estilos para el total del pedido */
+        #order-total {
+            font-weight: bold !important;
+            color: black !important;
+        }
+
+        /* Clase de animación que no queremos en la impresión */
+        .animate-pulse {
+            animation: none !important;
+        }
+    }
+</style>

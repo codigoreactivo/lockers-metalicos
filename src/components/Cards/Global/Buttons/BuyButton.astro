@@ -1,0 +1,20 @@
+---
+interface Props {
+  link: string;
+  text?: string;
+  highlightText?: string;
+}
+
+const { link, text = "Comprar", highlightText = "Ahora" } = Astro.props;
+---
+
+<a
+  href={link}
+  class="text-white bg-black uppercase oswald font-semibold rounded-md py-3 w-full text-center text-base hover:bg-[#EBBC2A] hover:text-black group duration-300 transition-all ease-linear"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  {text}
+  <span class="text-[#EBBC2A] group-hover:text-black"> {highlightText}</span>
+</a>
+

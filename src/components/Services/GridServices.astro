@@ -1,0 +1,62 @@
+---
+import ServiceCard from "../Cards/Services/ServiceCard.astro";
+const services = [
+  {
+    title: "Intalacion de Lockers Metalicos",
+    description:
+      "Cuando de apertura de Lockers Metalicos se trata, Fabrinsa es una de las pioneras en el oficio. Nuestros técnicos cuentan con amplio conocimiento, además se encuentran en constante capacitación.",
+    image: "/servicios/lockers-instalacion.jpg",
+    alt: "Apertura de Lockers Metalicos",
+  },
+  {
+    title: "Reparación de Lockers Metalicos",
+    description:
+      "Si deseas realizar la instalación de cualquier modelo de locker metalico, no dudes en contactarnos. Contamos con la maquinaria y personal adecuado para este tipo de trabajo.",
+    image: "/servicios/lockers-reparacion.jpg",
+    alt: "Reparación de Lockers Metalicos",
+  },
+  {
+    title: "Traslado de Lockers Metalicos",
+    description:
+      "Si necesita un traslado de Lockers Metalicos, se encuentra en el lugar indicado. Contamos con personal capacitado para trasladar cualquier tipo de locker metalico, desde la más liviana hasta la más pesada.",
+    image: "/servicios/lockers-traslado.jpg",
+    alt: "Traslado de Lockers Metalicos",
+  },
+  {
+    title: "Mantenimiento de Lockers Metalicos",
+    description:
+      "Si deseas realizar la instalación de cualquier modelo de locker metalico, no dudes en contactarnos. Contamos con la maquinaria y personal adecuado para este tipo de trabajo.",
+    image: "/servicios/lockers-mantenimiento-pintado.jpg",
+    alt: "Instalación de Lockers Metalicos",
+  },
+];
+---
+
+<section class="bg-black text-black w-full h-full p-4">
+  <div class="container mx-auto lg:py-10">
+    <div class="flex flex-col lg:flex-row justify-between items-center">
+      <div class="flex flex-col text-white py-3">
+        <h2 class="text-4xl my-2">NUESTROS SERVICIOS FABRINSA</h2>
+        <p class="text-gray-400">
+          En Fabrinsa, ofrecemos soluciones integrales para cajas fuertes, que
+          incluyen apertura, traslado, instalación y mantenimiento.
+          <br /> Nuestro equipo altamente capacitado garantiza un servicio seguro
+          y profesional en cada etapa, adaptándose a todas tus necesidades específicas.
+        </p>
+      </div>
+      <div class="flex flex-row whitespace-nowrap">
+        <a
+          href="tel:+51978820017"
+          class="text-white bg-black uppercase oswald font-semibold rounded-md py-3 my-4 border border-[#EBBC2A] px-6 w-fit text-center text-base hover:bg-[#EBBC2A] hover:text-black group duration-300 transition-all ease-linear"
+          rel="noopener noreferrer"
+        >
+          Llamanos
+          <span class="text-[#EBBC2A] group-hover:text-black"> Ahora</span>
+        </a>
+      </div>
+    </div>
+    <div class="grid lg:grid-cols-4 gap-6">
+      {services.map((service) => <ServiceCard service={service} />)}
+    </div>
+  </div>
+</section>

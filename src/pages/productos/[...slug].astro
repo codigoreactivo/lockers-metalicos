@@ -1,0 +1,269 @@
+---
+import IndividualProductLayout from "../../layouts/IndividualProductLayout.astro";
+import { Image } from "astro:assets";
+import { client } from "../../utils/apollo";
+import { SINGLE_PRODUCT_QUERY } from "../../graphql/queries";
+import ProductDetailBuy from "../../components/Products/ProductDetailBuy";
+import ProductCard from "../../components/Cards/Products/ProductCard.astro";
+import {
+  MdOutlineVerified,
+  MdOutlineLocalShipping,
+  MdOutlineSupport,
+  MdOutlineHandyman,
+} from "react-icons/md";
+
+// Obtén el slug de los parámetros de la ruta
+const { slug } = Astro.params;
+
+let product;
+let error;
+
+try {
+  const { data } = await client.query({
+    query: SINGLE_PRODUCT_QUERY,
+    variables: { id: slug },
+  });
+  product = data?.product;
+} catch (e) {
+  error = e;
+  console.error("Error al cargar el producto:", e);
+}
+
+// SEO Meta Tags
+const metaTitle = product?.name
+  ? `${product.name} | Fabrinsa`
+  : "Producto | Fabrinsa";
+const metaDescription =
+  product?.shortDescription ||
+  "Descubre nuestros productos de alta calidad en Fabrinsa";
+
+// Definimos las características destacadas
+const features = [
+  {
+    icon: MdOutlineVerified,
+    text: "Garantía de 1 año",
+  },
+  {
+    icon: MdOutlineLocalShipping,
+    text: "Envío a todo el Perú",
+  },
+  {
+    icon: MdOutlineSupport,
+    text: "Asesoría personalizada",
+  },
+  {
+    icon: MdOutlineHandyman,
+    text: "Instalación incluida",
+  },
+];
+
+// Antes de pasar a la plantilla, imprimimos información del producto
+if (product) {
+  console.log("Datos del producto para ProductDetailBuy:", {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    regularPrice: product.regularPrice,
+    salePrice: product.salePrice,
+    hasVariations: product.variations?.nodes?.length > 0,
+  });
+}
+---
+
+<IndividualProductLayout
+  title={metaTitle}
+  description={metaDescription}
+  product={product}
+>
+  {
+    error ? (
+      <div class="container mx-auto px-4 py-16 text-center">
+        <h1 class="text-2xl text-red-600 mb-4">Error al cargar el producto</h1>
+        <p class="text-gray-600 mb-8">
+          Por favor, intente nuevamente más tarde
+        </p>
+        <a
+          href="/productos"
+          class="inline-block bg-[#EBBC2A] text-white px-6 py-2 rounded-lg hover:bg-[#d4a826] transition-colors"
+        >
+          Volver a Productos
+        </a>
+      </div>
+    ) : !product ? (
+      <div class="container mx-auto px-4 py-16 text-center">
+        <h1 class="text-2xl text-gray-800 mb-4">Producto no encontrado</h1>
+        <p class="text-gray-600 mb-8">
+          El producto que buscas no existe o no está disponible
+        </p>
+        <a
+          href="/productos"
+          class="inline-block bg-[#EBBC2A] text-white px-6 py-2 rounded-lg hover:bg-[#d4a826] transition-colors"
+        >
+          Ver todos los productos
+        </a>
+      </div>
+    ) : (
+      <div class="container mx-auto px-4 lg:pt-8">
+        {/* Breadcrumb */}
+        <nav class="flex items-center space-x-2 py-4 text-xs lg:text-base">
+          <a
+            href="/"
+            class="text-gray-500 hover:text-[#EBBC2A] transition-colors duration-300"
+          >
+            Inicio
+          </a>
+          <span class="text-gray-400">/</span>
+          <a
+            href="/productos"
+            class="text-gray-500 hover:text-[#EBBC2A] transition-colors duration-300"
+          >
+            Productos
+          </a>
+          {product.productCategories?.nodes?.[0] && (
+            <>
+              <span class="text-gray-400">/</span>
+              <a
+                href={`/categorias/${product.productCategories.nodes[0].slug}`}
+                class="text-gray-500 hover:text-[#EBBC2A] transition-colors duration-300 truncate"
+              >
+                {product.productCategories.nodes[0].name}
+              </a>
+            </>
+          )}
+          <span class="text-gray-400">/</span>
+          <span class="text-[#EBBC2A] truncate font-semibold">
+            {product.name}
+          </span>
+        </nav>
+
+        {/* Producto Principal */}
+        <div class="grid lg:grid-cols-2 gap-4 mb-16">
+          {/* Galería de Imágenes */}
+          <div class="space-y-4">
+            <div class="aspect-square rounded-xl overflow-hidden bg-white border border-black/10 shadow-lg">
+              {product.featuredImage?.node?.sourceUrl ? (
+                <Image
+                  width="500"
+                  height="500"
+                  decoding="async"
+                  loading="lazy"
+                  src={product.featuredImage.node.sourceUrl}
+                  alt={product.featuredImage.node.altText || product.name}
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                  <span class="text-gray-400">Imagen no disponible</span>
+                </div>
+              )}
+            </div>
+            {product.galleryImages?.nodes &&
+              product.galleryImages.nodes.length > 0 && (
+                <div class="grid grid-cols-4 gap-4">
+                  {product.galleryImages.nodes.map((image: any) => (
+                    <button class="aspect-square rounded-lg overflow-hidden bg-white border border-black/10 cursor-pointer hover:border-[#EBBC2A] transition-all duration-300 shadow-md hover:shadow-lg">
+                      <Image
+                        width="300"
+                        height="300"
+                        decoding="async"
+                        loading="lazy"
+                        src={image.sourceUrl}
+                        alt={image.altText || "Imagen de galería"}
+                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+          </div>
+
+          {/* Información del Producto */}
+          <div class="space-y-6">
+            <div>
+              <h1 class="text-2xl lg:text-4xl font-bold mb-4 oswald uppercase text-gray-800">
+                {product.name}
+              </h1>
+              {product.productCategories?.nodes && (
+                <div class="flex flex-wrap gap-2">
+                  {product.productCategories.nodes.map((cat: any) => (
+                    <a
+                      href={`/categorias/${cat.slug}`}
+                      class="inline-block bg-gray-100 text-sm px-4 py-1.5 rounded-full text-gray-600 hover:bg-[#EBBC2A] hover:text-white transition-all duration-300"
+                    >
+                      {cat.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Módulo de compra */}
+            <div class="mt-6">
+              <ProductDetailBuy client:load product={product} />
+            </div>
+
+            {/* Descripción */}
+            {product.description && (
+              <div class="mt-8 bg-white rounded-xl p-4 shadow-lg border border-black/5">
+                <h2 class="text-2xl font-semibold mb-4 oswald text-gray-800">
+                  Descripción
+                </h2>
+                <div
+                  class="text-gray-600 space-y-4 [&>p]:mb-4 [&>ul]:list-disc [&>ul]:ml-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:mb-2 [&>p]:text-sm lg:[&>p]:text-base"
+                  set:html={product.description}
+                />
+              </div>
+            )}
+
+            {/* Características Destacadas */}
+            <div class="bg-[#303330] text-white rounded-xl p-6 shadow-lg">
+              <h2 class="text-2xl font-semibold mb-4 oswald">
+                Características Destacadas
+              </h2>
+              <ul class="space-y-3">
+                {features.map((feature) => (
+                  <li class="flex items-center gap-2">
+                    <span class="text-[#EBBC2A] flex items-center justify-center">
+                      <feature.icon className="text-xl" />
+                    </span>
+                    <span>{feature.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Productos Relacionados */}
+        {product.related?.nodes && product.related.nodes.length > 0 && (
+          <section class="mt-16 mb-24">
+            <h2 class="text-3xl font-bold mb-8 oswald text-center uppercase text-gray-800">
+              Productos Relacionados
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {product.related.nodes.slice(0, 4).map((relatedProduct: any) => (
+                <ProductCard product={relatedProduct} />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    )
+  }
+</IndividualProductLayout>
+
+<style>
+  /* Estilos para el contenido de la descripción */
+  :global(.product-description) {
+    @apply text-gray-600;
+  }
+  :global(.product-description p) {
+    @apply mb-4;
+  }
+  :global(.product-description ul) {
+    @apply list-disc ml-4 mb-4;
+  }
+  :global(.product-description h3) {
+    @apply text-xl font-semibold mb-2;
+  }
+</style>

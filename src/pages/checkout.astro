@@ -1,0 +1,10 @@
+---
+import CheckOutLayout from "../layouts/CheckOutLayout.astro";
+import CheckoutContainer from "../components/Checkout/CheckoutContainer";
+---
+
+<CheckOutLayout title="Confirmación de Compra | Tefinsa">
+  <main class="container mx-auto px-4 py-8">
+    <CheckoutContainer client:load />
+  </main>
+</CheckOutLayout>

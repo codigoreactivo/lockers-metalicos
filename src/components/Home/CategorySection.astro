@@ -1,0 +1,21 @@
+---
+const {categories} = Astro.props;
+import CategoryCard from "../Cards/CategoryCard.astro";
+---
+
+<section
+      class="container mx-auto flex flex-col items-center justify-center px-2 lg:px-0 my-20"
+    >
+      <h2 class="text-4xl uppercase font-semibold my-4">
+        Todas Nuestras Categorías con más del <span>20% de Descuento</span>
+      </h2>
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-6">
+        {categories.length > 0 ? (
+          categories.map((category: any) => (
+            <CategoryCard category={category} />
+          ))
+        ) : (
+          <p>No categories available.</p>
+        )}
+      </div>
+    </section>

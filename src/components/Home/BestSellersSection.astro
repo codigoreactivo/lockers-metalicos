@@ -1,0 +1,26 @@
+---
+const { bestSellersProducts } = Astro.props;
+import ProductCard from "../Cards/Products/ProductCard.astro";
+---
+
+<section>
+  <div class="container mx-auto py-6">
+    <h2 class="text-center text-4xl font-medium">
+      Nuestro Modelos mas
+      <span>Solicitados</span>
+    </h2>
+    <div
+      class="grid grid-cols-2 lg:grid-cols-4 gap-4 items-center justify-center py-4 px-2 lg:px-0"
+    >
+      {
+        bestSellersProducts.length > 0 ? (
+          bestSellersProducts
+            .slice(0, 4)
+            .map((product: any) => <ProductCard product={product} />)
+        ) : (
+          <p>No products available.</p>
+        )
+      }
+    </div>
+  </div>
+</section>

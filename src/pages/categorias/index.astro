@@ -1,0 +1,73 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { client } from "../../utils/apollo";
+import { CATEGORY_LIST_QUERY } from "../../graphql/queries";
+
+// Ejecutar la query con Apollo Client
+const { data } = await client.query({
+  query: CATEGORY_LIST_QUERY,
+  variables: {
+    parent: 81,
+    first: 30,
+  },
+});
+
+// Extraer las categorías del resultado
+const categories = data?.productCategories?.nodes || [];
+---
+
+<Layout
+  title="Categorías de Cajas Fuertes | Fabrinsa"
+  description="Explora nuestra amplia gama de categorías de cajas fuertes y productos de seguridad para hogares, negocios y oficinas."
+  keywords="categorías de cajas fuertes, tipos de cajas de seguridad, cajas fuertes para hogar, cajas fuertes para negocio"
+>
+  <main class="max-w-7xl mx-auto py-12 px-4">
+    <h1
+      class="text-4xl font-bold text-center mb-4 oswald uppercase text-gray-800"
+    >
+      Categorías de Productos
+    </h1>
+    <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+      Encuentra la solución perfecta para tus necesidades de seguridad. Navega a
+      través de nuestras categorías especializadas y descubre productos
+      diseñados para proteger lo que más valoras.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        categories.map((category: any) => (
+          <a
+            href={`/categorias/${category.slug}`}
+            class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
+          >
+            <div class="aspect-video relative overflow-hidden">
+              {category.image?.sourceUrl ? (
+                <img
+                  src={category.image.sourceUrl}
+                  alt={category.name}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              ) : (
+                <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <span class="text-gray-500">Sin imagen</span>
+                </div>
+              )}
+              <div class="absolute inset-0 bg-black bg-opacity-30 flex items-end">
+                <div class="p-4 w-full">
+                  <h2 class="text-xl font-semibold text-white oswald uppercase">
+                    {category.name}
+                  </h2>
+                  {category.count > 0 && (
+                    <p class="text-white text-opacity-80 text-sm mt-1">
+                      {category.count} productos
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</Layout>

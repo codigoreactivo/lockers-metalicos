@@ -1,0 +1,64 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ContactSection from "../components/Home/ContactSection.astro";
+import ServicesSection from "../components/Services/GridServices.astro";
+import HeroSection from "../components/Home/HeroSection.astro";
+import ClientLogoSliderSection from "../components/Home/ClientLogoSliderSection.astro";
+import CategorySection from "../components/Home/CategorySection.astro";
+import AboutUs from "../components/Home/AboutUs.astro";
+import NewProducts from "../components/Home/NewProducts.astro";
+import BestSellersSection from "../components/Home/BestSellersSection.astro";
+import CategoriesSection from "../components/Home/CategoriesSection.astro";
+import BannerSection from "../components/Home/BannerSection.astro";
+
+// Importamos el cliente Apollo
+import { client } from "../utils/apollo";
+// Importamos las queries separadas
+import {
+  PRODUCT_CARD_QUERY,
+  PRODUCT_CATEGORIES_QUERY,
+  NEW_PRODUCTS_QUERY,
+  BEST_SELLERS_QUERY,
+} from "../graphql/queries";
+
+// Ejecutamos las queries usando Apollo Client
+const { data: productData } = await client.query({
+  query: PRODUCT_CARD_QUERY,
+});
+
+const { data: categoryData } = await client.query({
+  query: PRODUCT_CATEGORIES_QUERY,
+});
+
+const { data: newProductsData } = await client.query({
+  query: NEW_PRODUCTS_QUERY,
+});
+
+const { data: bestSellersData } = await client.query({
+  query: BEST_SELLERS_QUERY,
+});
+
+// Extraemos los datos de los resultados
+let products = productData?.products?.nodes || [];
+let categories = categoryData?.productCategories?.nodes || [];
+let newProductsArray = newProductsData?.products?.nodes || [];
+let bestSellersProducts = bestSellersData?.products?.nodes || [];
+---
+
+<Layout
+  title="Fabrinsa Peru"
+  keywords="caja fuerte profesional, caja fuerte empotrar, caja de seguridad hotelera, apertura de cajas fuertes, caja fuerte de piso, caja fuerte para armas, cerradura para caja fuerte, venta de cajas fuertes, cajas de seguridad precios, caja seguridad, caja fuerte pared, apertura caja fuerte, mejores cajas fuertes, fabricantes de cajas fuertes, caja fuerte de pared, una caja fuerte, venta de cajas fuerte, caja fuerte laptop, caja de seguridad para armas, caja fuerte hotelera, caja fuerte para empotrar en el piso, caja fuerte para empotrar, caja fuerte venta, caja fuerte pesada, cajas fuertes hoteleras, caja fuerte de empotrar, reparacion caja fuerte, caja fuerte armas, tienda de cajas fuertes, caja de seguridad, cajas fuertes de seguridad, caja fuerte para pared, venta de cajas de seguridad, caja fuerte piso, caja fuerte para piso"
+>
+  <main class="bg-white">
+    <HeroSection />
+    <ClientLogoSliderSection />
+    <CategorySection categories={categories} />
+    <AboutUs />
+    <NewProducts newProductsData={newProductsArray} />
+    <BannerSection />
+    <BestSellersSection bestSellersProducts={bestSellersProducts} />
+    <CategoriesSection products={products} />
+    <ServicesSection />
+    <ContactSection />
+  </main>
+</Layout>

@@ -1,0 +1,87 @@
+---
+import "@fontsource-variable/oswald";
+import BaseHead from "../components/BaseHead.astro";
+import NavBar from "../components/Header/NavBar.astro";
+import Footer from "../components/Footer/Footer.astro";
+import Tawkto from "../components/FloatingButtons/Tawkto.astro";
+import WaComponent from "../components/FloatingButtons/WhatsApp/WaComponent";
+
+interface Props {
+    title: string;
+    description: string;
+    product: any;
+}
+
+const { title, description, product } = Astro.props;
+
+// Crear esquema de producto para SEO
+const productSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: product?.name,
+    description: product?.shortDescription,
+    image: product?.featuredImage?.node?.sourceUrl,
+    sku: product?.id,
+    brand: {
+        "@type": "Brand",
+        name: "Fabrinsa",
+    },
+    offers: {
+        "@type": "Offer",
+        url: Astro.url.href,
+        priceCurrency: "PEN",
+        price: product?.price,
+        availability: "https://schema.org/InStock",
+    },
+};
+---
+
+<!doctype html>
+<html lang="es">
+    <head>
+        <BaseHead title={title} description={description} />
+        <!-- Esquema de producto para SEO -->
+        <script
+            type="application/ld+json"
+            set:html={JSON.stringify(productSchema)}
+        />
+        <!-- Meta tags específicos para productos -->
+        <meta property="og:type" content="product" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        {
+            product?.featuredImage?.node?.sourceUrl && (
+                <meta
+                    property="og:image"
+                    content={product.featuredImage.node.sourceUrl}
+                />
+            )
+        }
+        <meta property="product:price:amount" content={product?.price} />
+        <meta property="product:price:currency" content="PEN" />
+    </head>
+    <body class="flex flex-col min-h-screen">
+        <NavBar />
+        <main class="flex-grow">
+            <slot />
+        </main>
+        <Tawkto />
+        <WaComponent client:load />
+        <Footer />
+    </body>
+</html>
+
+<style is:global>
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Oswald Variable", sans-serif;
+    }
+
+    .oswald {
+        font-family: "Oswald Variable", sans-serif;
+    }
+</style>

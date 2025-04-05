@@ -1,0 +1,140 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { client } from "../../utils/apollo";
+import { SINGLE_CATEGORY_QUERY } from "../../graphql/queries";
+import ProductCard from "../../components/Cards/Products/ProductCard.astro";
+import type { Product } from "../../components/Cards/Products/types/ProductTypes";
+
+const { slug } = Astro.params;
+
+let category;
+let error;
+
+try {
+  // Ejecutar la query con Apollo Client
+  const { data } = await client.query({
+    query: SINGLE_CATEGORY_QUERY,
+    variables: {
+      id: slug,
+      categoryIn: slug,
+    },
+  });
+  category = data?.productCategory;
+} catch (e) {
+  error = e;
+  console.error("Error al cargar la categoría:", e);
+}
+
+// SEO Meta Tags
+const metaTitle = category?.name
+  ? `${category.name} | Fabrinsa`
+  : "Categoría | Fabrinsa";
+const metaDescription =
+  category?.description ||
+  `Explora nuestra selección de ${category?.name || "productos"} de alta calidad en Fabrinsa`;
+---
+
+<Layout title={metaTitle} description={metaDescription}>
+  <main class="min-h-screen">
+    {
+      error ? (
+        <div class="container mx-auto px-4 py-16 text-center">
+          <h1 class="text-2xl text-red-600 mb-4">
+            Error al cargar la categoría
+          </h1>
+          <p class="text-gray-600 mb-8">
+            Por favor, intente nuevamente más tarde
+          </p>
+          <a
+            href="/categorias"
+            class="inline-block bg-[#EBBC2A] text-white px-6 py-2 rounded-lg hover:bg-[#d4a826] transition-colors"
+          >
+            Ver todas las categorías
+          </a>
+        </div>
+      ) : !category ? (
+        <div class="container mx-auto px-4 py-16 text-center">
+          <h1 class="text-2xl text-gray-800 mb-4">Categoría no encontrada</h1>
+          <p class="text-gray-600 mb-8">
+            La categoría que buscas no existe o no está disponible
+          </p>
+          <a
+            href="/categorias"
+            class="inline-block bg-[#EBBC2A] text-white px-6 py-2 rounded-lg hover:bg-[#d4a826] transition-colors"
+          >
+            Ver todas las categorías
+          </a>
+        </div>
+      ) : (
+        <div class="container mx-auto px-4 py-8">
+          {/* Hero de Categoría */}
+          <div class="relative rounded-xl overflow-hidden mb-12 h-60 md:h-80">
+            {category.categoriasWooExtendido?.backgroundImage ||
+            category.image?.sourceUrl ? (
+              <img
+                src={
+                  category.categoriasWooExtendido?.backgroundImage ||
+                  category.image?.sourceUrl
+                }
+                alt={category.name}
+                class="w-full h-full object-cover"
+              />
+            ) : (
+              <div class="w-full h-full bg-gradient-to-r from-gray-800 to-gray-600" />
+            )}
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center p-4">
+              <h1 class="text-5xl text-white oswald mb-4">{category.name}</h1>
+              <p class="text-white text-opacity-90">
+                {category.count} productos disponibles
+              </p>
+              {category.categoriasWooExtendido?.catalogoPdf?.node
+                ?.sourceUrl && (
+                <a
+                  href={
+                    category.categoriasWooExtendido.catalogoPdf.node.sourceUrl
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-4 bg-[#EBBC2A] text-black px-6 py-2 rounded-lg hover:bg-white transition-colors"
+                >
+                  Descargar Catálogo
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Descripción */}
+          {category.description && (
+            <div class="mb-12 max-w-4xl mx-auto text-center">
+              <div
+                class="prose prose-lg mx-auto"
+                set:html={category.description}
+              />
+            </div>
+          )}
+
+          {/* Grid de Productos */}
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {category.products.nodes.length > 0 ? (
+              category.products.nodes.map((product: Product) => (
+                <ProductCard product={product} />
+              ))
+            ) : (
+              <div class="col-span-full text-center py-12">
+                <p class="text-gray-600 mb-4">
+                  No hay productos disponibles en esta categoría
+                </p>
+                <a
+                  href="/productos"
+                  class="inline-block bg-[#EBBC2A] text-white px-6 py-2 rounded-lg hover:bg-[#d4a826] transition-colors"
+                >
+                  Ver todos los productos
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      )
+    }
+  </main>
+</Layout>

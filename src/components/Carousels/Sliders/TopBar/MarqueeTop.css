@@ -1,0 +1,13 @@
+
+.text-infite-slider .swiper-wrapper{
+    -webkit-transition-timing-function:linear!important;
+    -o-transition-timing-function:linear!important;
+    transition-timing-function:linear!important;
+    z-index: 0 !important;
+    align-items: center;
+  }
+
+  .text-infite-slider .swiper-slide{
+    height: 100%;
+    width: auto;
+  }

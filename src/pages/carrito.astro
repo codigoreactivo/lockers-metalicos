@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CartContainer from "../components/Cart/CartContainer";
+---
+
+<Layout title="Carrito de Compras | Tefinsa">
+  <main class="container mx-auto px-4 py-8">
+    <CartContainer client:visible />
+  </main>
+</Layout>

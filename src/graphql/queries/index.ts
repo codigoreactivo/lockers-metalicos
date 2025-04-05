@@ -1,0 +1,14 @@
+export { MAIN_SLIDER_QUERY } from './mainSlider';
+export { PRODUCT_CARD_QUERY } from './productCard';
+export { PRODUCT_CATEGORIES_QUERY } from './productCategories';
+export { NEW_PRODUCTS_QUERY } from './newProducts';
+export { BEST_SELLERS_QUERY } from './bestSellers';
+export { ALL_PRODUCTS_QUERY } from './allProducts';
+export { SINGLE_PRODUCT_QUERY } from './singleProduct';
+export { SALE_PRODUCTS_QUERY } from './saleProducts';
+export { CATEGORY_LIST_QUERY } from './categoryList';
+export { SINGLE_CATEGORY_QUERY } from './singleCategory';
+export { PRODUCT_SALE_CAROUSEL_QUERY } from './productSaleCarousel';
+export { SEARCH_PRODUCTS_QUERY } from './searchProducts';
+export { TOOLTIP_PRODUCTS_QUERY } from './tooltipProducts';
+export { MENU_CATEGORIES_QUERY } from './menuCategories'; 

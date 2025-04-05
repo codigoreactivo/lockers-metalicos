@@ -1,0 +1,50 @@
+---
+import Logo from "./Logo.astro";
+import MainMenu from "./MainMenu.astro";
+import { MobileMenu } from "./MobileMenu";
+import MarqueeTop from "../Carousels/Sliders/TopBar/MarqueeTop";
+import MenuAsesores from "../AltNavigation/MenuAsesores";
+import CartFlyout from "../Cart/CartFlyout";
+import CartFlyoutToggle from "../Cart/CartFlyout/CartFlyoutToggle";
+import SearchModal from "../Forms/Search/SearchModal";
+---
+
+<header class="w-full bg-white sticky top-0 z-50">
+  <div
+    class="h-8 bg-black text-white content-center w-full mx-auto text-center uppercase font-medium oswald"
+  >
+    <MarqueeTop client:load />
+  </div>
+
+  <div class="shadow-md px-4 lg:px-0 py-2">
+    <nav class="container mx-auto flex justify-between items-center">
+      <Logo />
+
+      <div class="flex items-center gap-4">
+        <div class="flex items-center">
+          <SearchModal client:load />
+        </div>
+        <MainMenu />
+
+        <a
+          href="https://fabrinsaperu.com/wp-content/uploads/2024/09/CAT-CAJAS-FUERTES.pdf"
+          target="_blank"
+          class="p-2 rounded-lg bg-black text-[#EBBC2A] hover:bg-[#EBBC2A] hover:text-black transition-colors duration-300 oswald hidden lg:block"
+        >
+          Catálogo
+        </a>
+
+        <div class="hidden lg:block">
+          <MenuAsesores client:load />
+        </div>
+
+        <div>
+          <CartFlyoutToggle client:load />
+          <CartFlyout client:load />
+        </div>
+
+        <MobileMenu client:load />
+      </div>
+    </nav>
+  </div>
+</header>

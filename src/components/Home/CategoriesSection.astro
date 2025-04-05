@@ -1,0 +1,37 @@
+---
+const { products } = Astro.props;
+import ProductCard from "../Cards/Products/ProductCard.astro";
+---
+
+<section
+  class="container mx-auto h-auto flex flex-col justify-center items-center my-8"
+>
+  <h2 class="text-4xl my-4">Explora todas las categorías</h2>
+  <div
+    class="container h-full grid grid-cols-2 lg:grid-cols-5 mx-auto gap-4 items-center justify-center px-2 lg:px-0"
+  >
+    <div
+      class="w-full h-full col-span-2 lg:col-auto rounded-xl bg-[url('/cajasbg.webp')] bg-center bg-cover text-white flex flex-col items-start justify-end relative"
+    >
+      <div class="w-full h-full bg-black/40 absolute top-0 rounded-xl"></div>
+      <div class="z-[1] p-5 flex flex-col gap-4">
+        <span>Categoria:</span>
+        <h2 class="text-3xl uppercase font-semibold">Cajas Fuertes</h2>
+        <a
+          href="/productos"
+          class="bg-[#EBBC2A] text-black uppercase oswald font-semibold rounded-md py-3 px-6 my-auto w-fit text-left text-base hover:bg-[#fff] hover:text-[#111] group duration-300 transition-all ease-linear"
+          rel="noopener noreferrer">Ver Todo</a
+        >
+      </div>
+    </div>
+    {
+      products.length > 0 ? (
+        products
+          .slice(0, 9)
+          .map((product: any) => <ProductCard product={product} />)
+      ) : (
+        <p>No products available.</p>
+      )
+    }
+  </div>
+</section>

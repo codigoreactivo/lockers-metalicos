@@ -1,0 +1,27 @@
+---
+// No es necesario importar Alpine.js aquí, solo usa el script en el HTML.
+---
+
+<div x-data="{ open: false }" class="relative oswald">
+  <button
+    @click="open = !open"
+    :class="open ? 'bg-black text-white' : 'bg-white text-black'"
+    class="p-2 rounded-xl border-2 border-black transition-colors duration-300 hover:bg-black hover:text-white flex flex-row gap-1 justify-center items-center"
+  >
+    <img src="/call.svg" alt="" class="w-5 h-auto" />
+
+    <p class="">Llamanos</p>
+  </button>
+
+  <div
+    x-show="open"
+    @click.away="open = false"
+    class="absolute bg-white border border-black/20 mt-2 rounded w-80 right-0 z-10"
+  >
+    <ul class="flex flex-col gap-4 my-4 text-right text-xl">
+      <li class="p-2 border-b"><a href="tel:+51978820017">Asesor FBS 1</a></li>
+      <li class="p-2 border-b"><a href="tel:+51978820014">Asesor FBS 2</a></li>
+      <li class="p-2 border-b"><a href="tel:+51993094770">Asesor FBS 3</a></li>
+    </ul>
+  </div>
+</div>

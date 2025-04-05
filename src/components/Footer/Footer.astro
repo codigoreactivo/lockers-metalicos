@@ -1,0 +1,209 @@
+---
+import { Image } from "astro:assets";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaWhatsapp,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaYoutube,
+  FaTiktok,
+} from "react-icons/fa";
+import FooterCategories from "./FooterCategories.tsx";
+import Services from "./ServicesList.astro";
+// Dejamos para cargar las categorías del lado del cliente
+// Esto evita que el footer bloquee la renderización
+---
+
+<footer class="bg-black text-white">
+  <div class="container mx-auto py-12 px-4">
+    <!-- Grid Principal -->
+    <div class="grid lg:grid-cols-5 gap-8">
+      <!-- Columna 1: Logo y Descripción -->
+      <div class="flex flex-col gap-4">
+        <Image
+          src="/logofbsneo.png"
+          alt="Fabrinsa Logo"
+          width="300"
+          height="80"
+          class="mb-4 drop-shadow-[2px_2px_105px_50px_rgba(255,255,255,0.95)]"
+        />
+        <p class="text-gray-400 text-sm">
+          Somos líderes en fabricación y comercialización de cajas fuertes en
+          Perú, brindando soluciones de seguridad confiables y de alta calidad
+          desde hace más de 20 años.
+        </p>
+        <div class="flex gap-4 mt-4">
+          <a
+            href="https://www.facebook.com/fabrinsa"
+            class="bg-[#EBBC2A] p-2 rounded-full hover:bg-white transition-all duration-300"
+          >
+            <FaFacebookF className="text-black text-xl" />
+          </a>
+          <a
+            href="https://www.instagram.com/cajasfuertesfabrinsaperu"
+            class="bg-[#EBBC2A] p-2 rounded-full hover:bg-white transition-all duration-300"
+          >
+            <FaInstagram className="text-black text-xl" />
+          </a>
+          <a
+            href="https://www.youtube.com/@fabrinsa"
+            class="bg-[#EBBC2A] p-2 rounded-full hover:bg-white transition-all duration-300"
+          >
+            <FaYoutube className="text-black text-xl" />
+          </a>
+          <a
+            href="https://www.tiktok.com/@fabrinsa"
+            class="bg-[#EBBC2A] p-2 rounded-full hover:bg-white transition-all duration-300"
+          >
+            <FaTiktok className="text-black text-xl" />
+          </a>
+          <a
+            href="https://wa.me/51978820017"
+            class="bg-[#EBBC2A] p-2 rounded-full hover:bg-white transition-all duration-300"
+          >
+            <FaWhatsapp className="text-black text-xl" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Columna 2: Enlaces Rápidos -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-xl font-bold mb-4">Enlaces Rápidos</h3>
+        <ul class="flex flex-col gap-3">
+          <li>
+            <a
+              href="/productos"
+              class="text-gray-400 hover:text-[#EBBC2A] transition-colors duration-300"
+            >
+              Productos
+            </a>
+          </li>
+          <li>
+            <a
+              href="/categorias"
+              class="text-gray-400 hover:text-[#EBBC2A] transition-colors duration-300"
+            >
+              Categorías
+            </a>
+          </li>
+          <li>
+            <a
+              href="/ofertas"
+              class="text-gray-400 hover:text-[#EBBC2A] transition-colors duration-300"
+            >
+              Ofertas
+            </a>
+          </li>
+          <li>
+            <a
+              href="/servicios"
+              class="text-gray-400 hover:text-[#EBBC2A] transition-colors duration-300"
+            >
+              Servicios
+            </a>
+          </li>
+          {
+            /*
+          <li>
+            <a
+              href="/nosotros"
+              class="text-gray-400 hover:text-[#EBBC2A] transition-colors duration-300"
+            >
+              Nosotros
+            </a>
+          </li>
+          <li>
+            <a
+              href="/contacto"
+              class="text-gray-400 hover:text-[#EBBC2A] transition-colors duration-300"
+            >
+              Contacto
+            </a>
+          </li>
+         */
+          }
+        </ul>
+      </div>
+      <Services />
+      <!-- Columna 3: Categorías (cargadas de forma asíncrona) -->
+      <FooterCategories client:idle />
+
+      <!-- Columna 4: Servicios y Contacto -->
+      <div class="flex flex-col gap-6">
+        <!-- Servicios -->
+
+        <!-- Contacto -->
+        <div class="flex flex-col gap-4">
+          <h3 class="text-xl font-bold mb-2">Contacto</h3>
+          <ul class="flex flex-col gap-4">
+            <li class="flex items-start gap-3">
+              <FaMapMarkerAlt className="text-[#EBBC2A] text-xl mt-1" />
+              <a
+                href="https://maps.app.goo.gl/mqTYecHSrFMiuA9C8"
+                target="_blank"
+                class="text-gray-400 hover:text-[#EBBC2A] transition-colors duration-300"
+              >
+                Jr. Nevado Sara Sara Mz.C10 Lote 3A AAHH Las, Chorrillos 15036
+              </a>
+            </li>
+            <li class="flex items-center gap-3">
+              <FaPhoneAlt className="text-[#EBBC2A] text-xl" />
+              <a
+                href="tel:+51978820017"
+                class="text-gray-400 hover:text-[#EBBC2A] transition-colors duration-300"
+              >
+                +51 978 820 017
+              </a>
+            </li>
+            <li class="flex items-center gap-3">
+              <FaEnvelope className="text-[#EBBC2A] text-xl" />
+              <a
+                href="mailto:ventas@fabrinsa.com.pe"
+                class="text-gray-400 hover:text-[#EBBC2A] transition-colors duration-300"
+              >
+                ventas@fabrinsa.com.pe
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Línea divisoria -->
+    <div class="border-t border-gray-800 my-8"></div>
+
+    <!-- Copyright -->
+    <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+      <p class="text-gray-400 text-sm">
+        © {new Date().getFullYear()} Fabrinsa. Todos los derechos reservados. RUC:
+        20601625891
+      </p>
+      <div class="flex gap-4">
+        <a
+          href="/privacidad"
+          class="text-gray-400 text-sm hover:text-[#EBBC2A] transition-colors duration-300"
+        >
+          Política de Privacidad
+        </a>
+        <a
+          href="/terminos"
+          class="text-gray-400 text-sm hover:text-[#EBBC2A] transition-colors duration-300"
+        >
+          Términos y Condiciones
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  h6 {
+    text-transform: uppercase;
+  }
+  ul {
+    list-style: none;
+    margin-left: 5px;
+  }
+</style>

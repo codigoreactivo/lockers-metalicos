@@ -1,0 +1,66 @@
+---
+import type { Product } from "./types/ProductTypes";
+import DiscountLabel from "../Global/Labels/DiscountLabel.astro";
+import ProductImage from "../Global/Images/ProductImage.astro";
+import PriceDisplay from "../Global/Prices/PriceDisplay.astro";
+import AddToCartForm from "../../Cart/Buttons/AddToCart";
+import WhatsAppBuyButton from "../Global/Buttons/WhatsAppBuyButtonReact.tsx";
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+
+// Validamos que product tenga los datos necesarios
+const cartProductData = {
+  id: product?.id || "",
+  name: product?.name || "",
+  price: parseFloat(product?.price || product?.salePrice || "0"),
+  featuredImage: {
+    node: {
+      sourceUrl: product?.featuredImage?.node?.sourceUrl || "",
+    },
+  },
+};
+
+const whatsappProductData = {
+  name: product?.name || "",
+  price: product?.price || product?.salePrice || "",
+};
+---
+
+<div
+  class="h-full flex flex-col justify-between border relative border-black/15 rounded-xl lg:gap-2 p-2 lg:p-3"
+>
+  <DiscountLabel discount="10% OFF" />
+
+  <div>
+    <ProductImage
+      image={{
+        url: product.featuredImage?.node?.sourceUrl,
+        alt: product.featuredImage?.node?.altText,
+      }}
+      slug={product.slug}
+    />
+
+    <div>
+      <a href={`/productos/${product.slug}`}>
+        <h2 class="text-xl lg:text-2xl my-1 uppercase font-medium leading-none">
+          {product.name}
+        </h2>
+      </a>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2 lg:gap-5">
+    <PriceDisplay
+      regularPrice={product.regularPrice}
+      salePrice={product.salePrice}
+    />
+    <div class="flex flex-col gap-2">
+      <AddToCartForm client:visible product={cartProductData} />
+      <WhatsAppBuyButton client:visible product={whatsappProductData} />
+    </div>
+  </div>
+</div>

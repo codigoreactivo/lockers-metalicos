@@ -1,0 +1,32 @@
+---
+import { Image } from "astro:assets";
+interface Props {
+  image: {
+    url?: string;
+    alt?: string;
+  };
+  slug: string;
+}
+
+const { image, slug } = Astro.props;
+---
+
+{
+  image?.url ? (
+    <a href={`/productos/${slug}`}>
+      <Image
+        width="500"
+        height="500"
+        decoding="async"
+        loading="lazy"
+        alt={image.alt || "Imagen del producto"}
+        src={image.url}
+        class="w-full h-auto aspect-square object-cover hover:scale-105 transform duration-300 transition-all ease-linear rounded-xl cursor-pointer"
+      />
+    </a>
+  ) : (
+    <div class="w-full h-auto bg-gray-200 flex items-center justify-center aspect-square object-cover rounded-xl">
+      <span class="text-gray-500">No Image Available</span>
+    </div>
+  )
+}

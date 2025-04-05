@@ -1,0 +1,21 @@
+---
+interface Props {
+    colortext1?: string;
+    colortext2?: string;
+    href: string;
+}
+
+const { colortext1, colortext2, href } = Astro.props;
+---
+
+<a
+    href={href}
+    class="text-white bg-black uppercase oswald font-semibold rounded-md py-3 px-6 my-auto w-full text-center text-base hover:bg-[#fff] hover:text-black group duration-300 transition-all ease-linear"
+    rel="noopener noreferrer"
+>
+
+   {colortext1}
+    <span class="text-[#EBBC2A] group-hover:text-black">
+    {colortext2}
+    </span>
+</a>

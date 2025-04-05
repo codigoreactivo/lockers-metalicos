@@ -1,0 +1,26 @@
+---
+import { client } from "../../utils/apollo";
+import { TOOLTIP_PRODUCTS_QUERY } from "../../graphql/queries";
+import { ProductCardToggle } from "../Cards/Global/ProductCardToggle";
+
+// Usar el cliente Apollo con nuestras consultas optimizadas
+const { data } = await client.query({
+  query: TOOLTIP_PRODUCTS_QUERY,
+});
+
+let tooltip = data.products.nodes;
+---
+
+<div
+  class="h-auto w-full rounded-lg flex flex-col lg:flex-row justify-center items-center gap-4"
+>
+  {
+    tooltip && tooltip.length > 0 ? (
+      tooltip.map((product: any) => (
+        <ProductCardToggle client:visible product={product} />
+      ))
+    ) : (
+      <p>No products available</p>
+    )
+  }
+</div>

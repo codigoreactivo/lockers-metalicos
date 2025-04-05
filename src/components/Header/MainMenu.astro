@@ -1,0 +1,85 @@
+---
+import { menuItems as staticMenuItems } from "../../config/menuItems";
+import { client } from "../../utils/apollo";
+import { MENU_CATEGORIES_QUERY } from "../../graphql/queries";
+
+// Interfaz para los elementos de menú
+interface MenuItem {
+  path: string;
+  label: string;
+  children?: MenuItem[];
+}
+
+// Cargar categorías directamente en este componente
+let dynamicCategories: MenuItem[] = [];
+
+try {
+  // La consulta ya está filtrada para mostrar solo categorías hijas de MAIN_CATEGORY_ID
+  const { data } = await client.query({
+    query: MENU_CATEGORIES_QUERY,
+    fetchPolicy: "cache-first", // Usar caché si está disponible
+  });
+  // Transformar datos a formato de menú
+  dynamicCategories =
+    data?.productCategories?.nodes?.map((category: any) => ({
+      path: `/categorias/${category.slug}`,
+      label: category.name,
+    })) || [];
+} catch (error) {
+  console.error("Error al cargar categorías del menú:", error);
+}
+
+// Filtrar categorías del menú estático
+const menuWithoutCategories = staticMenuItems.filter(
+  (item) => item.label !== "Categorías",
+);
+
+// Crear menú combinado con categorías dinámicas
+const menuItems = [
+  ...menuWithoutCategories.slice(0, 2), // Primeros 2 ítems
+  {
+    path: "/categorias",
+    label: "Categorías",
+    children:
+      dynamicCategories.length > 0
+        ? dynamicCategories
+        : [
+            { path: "/categorias/cajas-fuertes", label: "Cajas Fuertes" },
+            { path: "/categorias/cerraduras", label: "Cerraduras" },
+            { path: "/categorias/cofres", label: "Cofres" },
+          ], // Usar valores estáticos como fallback
+  },
+  ...menuWithoutCategories.slice(2), // Resto de ítems
+];
+---
+
+<ul class="hidden lg:flex space-x-4 oswald font-semibold">
+  {
+    menuItems.map((item) => (
+      <li class="relative group">
+        <a
+          href={item.path}
+          class="text-gray-800 hover:text-[#EBBC2A] transition-colors duration-300"
+        >
+          {item.label}
+        </a>
+        {item.children && item.children.length > 0 && (
+          <div class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <ul class="py-2">
+              {item.children.map((child) => (
+                <li>
+                  <a
+                    href={child.path}
+                    class="block px-4 py-2 text-gray-800 hover:bg-[#EBBC2A] hover:text-white transition-colors duration-300"
+                  >
+                    {child.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,65 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProductCard from "../../components/Cards/Products/ProductCard.astro";
+import { client } from "../../utils/apollo";
+import { SALE_PRODUCTS_QUERY } from "../../graphql/queries";
+import { SALE_PRODUCT_IDS } from "../../graphql/config";
+
+// Estado inicial
+let products: any[] = [];
+
+// Cargar productos con Apollo Client
+async function loadProducts() {
+  const { data } = await client.query({
+    query: SALE_PRODUCTS_QUERY,
+    variables: {
+      include: SALE_PRODUCT_IDS,
+    },
+  });
+
+  products = data.products.nodes;
+}
+
+// Cargar productos iniciales
+await loadProducts();
+---
+
+<Layout
+  title="Ofertas y Liquidaciones | Fabrinsa"
+  keywords="ofertas de cajas fuertes, cajas fuertes en liquidación, descuentos en cajas de seguridad"
+  description="Descubre nuestras mejores ofertas en cajas fuertes y productos de seguridad con descuentos especiales"
+>
+  <div class="my-12">
+    <div class="container mx-auto px-4 lg:px-0">
+      <h1
+        class="text-center text-4xl font-bold oswald uppercase text-gray-800 mb-4"
+      >
+        Productos en Oferta
+      </h1>
+      <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">
+        Aprovecha nuestras mejores promociones y descuentos en productos
+        seleccionados. <br /> ¡Precios especiales por tiempo limitado!
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 my-12 gap-6">
+        {
+          products.length > 0 ? (
+            products.map((product: any) => <ProductCard product={product} />)
+          ) : (
+            <div class="col-span-full text-center py-12">
+              <p class="text-xl text-gray-600">
+                No hay productos en oferta disponibles en este momento.
+              </p>
+              <a
+                href="/productos"
+                class="inline-block mt-4 bg-[#EBBC2A] text-white px-6 py-2 rounded-lg hover:bg-[#d4a826] transition-colors"
+              >
+                Ver todos los productos
+              </a>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</Layout>

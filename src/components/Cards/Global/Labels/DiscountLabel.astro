@@ -1,0 +1,15 @@
+---
+interface Props {
+  discount: string;
+  className?: string;
+}
+
+const { discount, className = "" } = Astro.props;
+---
+
+<div
+  class={`bg-red-600 text-white oswald text-base lg:text-lg p-1 lg:p-2 rounded-md w-fit absolute right-2 top-2 z-10 ${className}`}
+>
+  {discount}
+</div>
+
